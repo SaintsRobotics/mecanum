@@ -12,6 +12,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
   private static final int kFrontLeftChannel = 1;
@@ -48,9 +49,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    ChassisSpeeds spds0 = new ChassisSpeeds(-m_controller.getLeftY() * 7, m_controller.getLeftX() * 7, m_controller.getRightX());
+    ChassisSpeeds spds0 = new ChassisSpeeds(-m_controller.getLeftY() * 15, m_controller.getLeftX() * 15, m_controller.getRightX());
     ChassisSpeeds speds = ChassisSpeeds.fromFieldRelativeSpeeds(spds0, new Rotation2d(m_rot));
-    m_rot += speds.omegaRadiansPerSecond * kDefaultPeriod;
+    m_rot += speds.omegaRadiansPerSecond * 0.25;
+    m_rot %= Math.PI * 2;
+    SmartDashboard.putNumber("r", m_rot);
     m_robotDrive.driveCartesian(clamp(speds.vxMetersPerSecond / 5f, -0.5f, 0.5f), clamp(speds.vyMetersPerSecond / 5f, -0.5, 0.5f), clamp(speds.omegaRadiansPerSecond / 1f, -0.5f, 0.5f));
   }
 }
